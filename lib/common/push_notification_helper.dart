@@ -1,12 +1,20 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:push_notification_demo/main.dart';
+import 'package:push_notification_demo/view/data_view.dart';
+import 'package:push_notification_demo/view/detail_view.dart';
 
 Future<void> backgroundHandler(RemoteMessage message) async {
+  print("backgroundHandler:");
   print(message.data.toString());
   print(message.notification?.title ?? "");
+
+  openNotification(message.data);
 }
 
 class PushNotificationHelper {
@@ -29,6 +37,10 @@ class PushNotificationHelper {
 
       if (message != null) {
         print("New Notification");
+        print(message.data.toString());
+        print(message.notification?.title ?? "");
+        //Close App To Open need to 0.5 second delay form init
+        openNotification(message.data, initializeMessage: true);
       }
     });
 
@@ -40,32 +52,35 @@ class PushNotificationHelper {
         print(message.notification!.body);
         print(message.data);
 
-        // Local Notification Code to Display Alert
-        NotificationHelper.displayNotification(message);
+        if (Platform.isAndroid) {
+          // Local Notification Code to Display Alert
+          NotificationHelper.displayNotification(message);
+        }
       }
     });
 
     // App on Backaground not Terminated
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print("FirebaseMessaging.onMessage.listen");
+      print("FirebaseMessaging.onMessageOpenedApp.listen");
       if (message.notification != null) {
         print(message.notification!.title);
         print(message.notification!.body);
         print(message.data);
+
+        openNotification(message.data);
       }
     });
 
-    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+        alert: true, badge: true, sound: true);
   }
 
   static Future<String> getDeviceTokenToSendNotification() async {
-      fcmToken = (await FirebaseMessaging.instance.getToken()).toString();
-      print("FCM Token: $fcmToken");
+    fcmToken = (await FirebaseMessaging.instance.getToken()).toString();
+    print("FCM Token: $fcmToken");
 
-      return fcmToken;
+    return fcmToken;
   }
-
-
 }
 
 class NotificationHelper {
@@ -78,8 +93,22 @@ class NotificationHelper {
 
     flutterLocalNotificationsPlugin.initialize(
         const InitializationSettings(android: initializationSettingsAndroid),
-        onDidReceiveNotificationResponse: (details) {},
-        onDidReceiveBackgroundNotificationResponse: localBackgroundHandler);
+        onDidReceiveNotificationResponse: (details) {
+      print(details.toString());
+      print("localBackgroundHandler :");
+      print(details.notificationResponseType ==
+              NotificationResponseType.selectedNotification
+          ? "selectedNotification"
+          : "selectedNotificationAction");
+      print(details.payload);
+
+      try {
+        var payloadObj = json.decode(details.payload ?? "{}") as Map? ?? {};
+        openNotification(payloadObj);
+      } catch (e) {
+        print(e);
+      }
+    }, onDidReceiveBackgroundNotificationResponse: localBackgroundHandler);
   }
 
   static void displayNotification(RemoteMessage message) async {
@@ -96,7 +125,7 @@ class NotificationHelper {
           message.notification!.title,
           message.notification!.body,
           notificationDetails,
-          payload: message.data['_id'] ?? "" );
+          payload: json.encode(message.data));
     } on Exception catch (e) {
       print(e);
     }
@@ -105,4 +134,41 @@ class NotificationHelper {
 
 Future<void> localBackgroundHandler(NotificationResponse data) async {
   print(data.toString());
+  print("localBackgroundHandler :");
+  print(data.notificationResponseType ==
+          NotificationResponseType.selectedNotification
+      ? "selectedNotification"
+      : "selectedNotificationAction");
+  print(data.payload);
+
+  try {
+    var payloadObj = json.decode(data.payload ?? "{}") as Map? ?? {};
+    openNotification(payloadObj);
+  } catch (e) {
+    print(e);
+  }
+}
+
+void openNotification(Map payloadObj, {bool initializeMessage = false}) async {
+  if (initializeMessage) {
+    await Future.delayed(const Duration(milliseconds: 500));
+  }
+
+  try {
+    if (payloadObj.isNotEmpty) {
+      switch (payloadObj["page"] as String? ?? "") {
+        case "detail":
+          navigatorKey.currentState?.push(MaterialPageRoute(
+              builder: (context) => DetailView(nObj: payloadObj)));
+          break;
+        case "data":
+          navigatorKey.currentState?.push(MaterialPageRoute(
+              builder: (context) => DataView(nObj: payloadObj)));
+          break;
+        default:
+      }
+    }
+  } catch (e) {
+    print(e);
+  }
 }

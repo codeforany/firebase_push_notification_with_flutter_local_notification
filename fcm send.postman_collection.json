@@ -1,0 +1,45 @@
+{
+	"info": {
+		"_postman_id": "625350e0-31fa-485e-9135-6b6256fd74b7",
+		"name": "fcm send",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "send",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "key=AAAAZu7lIeM:APA91bH3ojlFhMZO1gVaec753sBYbXCF2H8m6XWTU5a5xO4-xifuLmSob0WYRvUjzf89pjwY-6vbdrQ03bO9azR1DWKC-hq1h-MSSMTf2IAzrwgp5Pza--Sge4lL9NhCjtv5A-dBQgCX",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"registration_ids\": [\n        \"e9iNyEF0RJOUwwKaYJYhuc:APA91bGluNJs1SrfIvJXS_0Ie-fak1Jgc9aqILTXDRSSxJnmFFGHHSK6qsWxzqnrBaC7R4bY-Rp1hlzZzpqzma45V-Puw_iP7fhGetmdmOzooUmdas7RWAMG19szQU5RwsDM4ssHUm5O\"\n        \n    ],\n    \"notification\": {\n        \"title\":\"Test Push\",\n        \"body\":\"Test Message Body\",\n        \"android_channel_id\":\"push_notification_demo\",\n        \"sound\":true\n    },\n    \"data\": {\n        \"d_id\":\"1\",\n        \"page\":\"data\",\n        \"title\":\"device push data\"\n    }\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://fcm.googleapis.com/fcm/send",
+					"protocol": "https",
+					"host": [
+						"fcm",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"fcm",
+						"send"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:push_notification_demo/common/push_notification_helper.dart';
 import 'package:push_notification_demo/view/home_view.dart';
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Push Notification',
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
