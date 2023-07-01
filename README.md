@@ -5,6 +5,7 @@
 - [Youtube Video: 1 Integration Step By Step ](https://youtu.be/bCSn7Flm33o)
 - [Youtube Video: 2 iOS Apple Push Configuration Step By Step ](https://youtu.be/pZkOeXTrmU4)
 - [Youtube Video: 3 iOS & Android Tap On Notification Open Screen with Pass Value ](https://youtu.be/ksBlr7vwawQ)
+- [Youtube Video: 4 Notification Tap On Splash Screen With User login After Open Screen ](https://youtu.be/fq0Qpg6xmjU)
 
 # Server PostMan Fire Payload
 {
@@ -21,7 +22,9 @@
     "data": {
         "d_id":"1",
         "page":"detail",
-        "title":"hi device push data"
+        "title":"hi device push data",
+        "user_login_need":"true",
+        "user_id":"2"
     }
 }
 

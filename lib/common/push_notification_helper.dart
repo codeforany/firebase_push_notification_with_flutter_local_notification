@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:push_notification_demo/common/globs.dart';
 import 'package:push_notification_demo/main.dart';
 import 'package:push_notification_demo/view/data_view.dart';
 import 'package:push_notification_demo/view/detail_view.dart';
@@ -39,8 +40,6 @@ class PushNotificationHelper {
         print("New Notification");
         print(message.data.toString());
         print(message.notification?.title ?? "");
-        //Close App To Open need to 0.5 second delay form init
-        openNotification(message.data, initializeMessage: true);
       }
     });
 
@@ -149,11 +148,32 @@ Future<void> localBackgroundHandler(NotificationResponse data) async {
   }
 }
 
-void openNotification(Map payloadObj, {bool initializeMessage = false}) async {
-  if (initializeMessage) {
-    await Future.delayed(const Duration(milliseconds: 500));
-  }
+void openNotification(Map payloadObj) async {
+  await Future.delayed(const Duration(milliseconds: 300));
+  if(payloadObj["user_login_need"].toString() == "true" ) {
+    if(Globs.udValueBool(Globs.userLogin)) {
+      // App inside user login
+      if( payloadObj["user_id"].toString() == userPayload["user_id"].toString() ) {
+        // Notification Payload Data user id current
+        openNotificationScreen(payloadObj);
+      }else{
+        // Notification Payload Data user id not match
+        print("skip open screen");
+      }
+    }else{
+      // App inside not user login
+      pushRedirect = true;
+      pushPayload = payloadObj;
 
+    }
+  }else{
+    //User not need
+    openNotificationScreen(payloadObj);
+  }
+  
+}
+
+void openNotificationScreen(Map payloadObj) {
   try {
     if (payloadObj.isNotEmpty) {
       switch (payloadObj["page"] as String? ?? "") {

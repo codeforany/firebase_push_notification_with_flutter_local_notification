@@ -18,7 +18,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"registration_ids\": [\n        \"e9iNyEF0RJOUwwKaYJYhuc:APA91bGluNJs1SrfIvJXS_0Ie-fak1Jgc9aqILTXDRSSxJnmFFGHHSK6qsWxzqnrBaC7R4bY-Rp1hlzZzpqzma45V-Puw_iP7fhGetmdmOzooUmdas7RWAMG19szQU5RwsDM4ssHUm5O\"\n        \n    ],\n    \"notification\": {\n        \"title\":\"Test Push\",\n        \"body\":\"Test Message Body\",\n        \"android_channel_id\":\"push_notification_demo\",\n        \"sound\":true\n    },\n    \"data\": {\n        \"d_id\":\"1\",\n        \"page\":\"data\",\n        \"title\":\"device push data\"\n    }\n    \n}",
+					"raw": "{\n    \"registration_ids\": [\n        \"fa4o0KTeTjqkTcszCMP60N:APA91bEWwOkphmVrP2Xccyvv7fAUhiiz0eSWGoA6e7j5TS_SjFHP4K3pIpbX9u1uAFMM-c9ep4A0ozVoZDbNG0JLkvYPiMp4BhYocSR5FS1JKnm4TnIWH1C4sfX7Wrx0yDkXoon8PQNM\"\n        \n    ],\n    \"notification\": {\n        \"title\":\"Test Push\",\n        \"body\":\"Test Message Body\",\n        \"android_channel_id\":\"push_notification_demo\",\n        \"sound\":true\n    },\n    \"data\": {\n        \"d_id\":\"1\",\n        \"page\":\"detail\",\n        \"title\":\"hi device push data\",\n        \"user_login_need\":\"true\",\n        \"user_id\":\"2\"\n    }\n    \n}",
 					"options": {
 						"raw": {
 							"language": "json"
